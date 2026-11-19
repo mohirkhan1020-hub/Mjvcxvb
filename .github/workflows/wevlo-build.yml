@@ -1,0 +1,16 @@
+name: Build Python APK
+on:
+  push:
+    branches: [ "main" ]
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: ArtemSBulgakov/buildozer-action@v1
+        with: { command: "buildozer android debug", buildozer_version: "stable" }
+      - uses: softprops/action-gh-release@v2
+        with: { tag_name: v1.0-${{ github.run_number }}, files: "bin/*.apk" }
